@@ -1,0 +1,25 @@
+{
+  "name": "mainpage.js",
+  "version": "0.0.0",
+  "description": "an asynchronous component initializer",
+  "main": "mainpage.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zverev/mainpage.js.git"
+  },
+  "author": "Alexander Zverev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zverev/mainpage.js/issues"
+  },
+  "homepage": "https://github.com/zverev/mainpage.js",
+  "devDependencies": {
+    "should": "^4.3.0"
+  }
+}
