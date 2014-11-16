@@ -12,14 +12,17 @@
     };
 
     Promise.prototype.then = function(onResolve, onReject) {
-        this._onResove = (typeof onResolve === 'function') && onResolve;
+        this._onResolve = (typeof onResolve === 'function') && onResolve;
         this._onReject = (typeof onReject === 'function') && onReject;
-        if (this._state === true && !this._done) {
+        if (this._state === true && !this._done && this._onResolve) {
             this._onResolve(this._onResolveArgs);
+            this._done = true;
         }
-        if (this._state === false && !this._done) {
+        if (this._state === false && !this._done && this._onReject) {
             this._onReject(this._onRejectArgs);
+            this._done = true;
         }
+        return this;
     };
 
     Promise.prototype.resolve = function(value) {
@@ -32,10 +35,10 @@
         }
     };
 
-    Promise.prototype.reject = function(value) {
+    Promise.prototype.reject = function(reason) {
         if (this._state === null) {
             this._state = false;
-            this._onReject(value);
+            this._onReject(reason);
         } else {
             // call onReject in then
             this._onRejectArgs = arguments;
