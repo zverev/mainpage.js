@@ -1,5 +1,47 @@
 (function() {
 
+    var Promise = function() {
+        // null = pending
+        // true = fulfilled
+        // false = rejected
+        this.promise = this;
+        this._state = null;
+        this._onResolve = function() {};
+        this._onReject = function() {};
+        this._done = false;
+    };
+
+    Promise.prototype.then = function(onResolve, onReject) {
+        this._onResove = (typeof onResolve === 'function') && onResolve;
+        this._onReject = (typeof onReject === 'function') && onReject;
+        if (this._state === true && !this._done) {
+            this._onResolve(this._onResolveArgs);
+        }
+        if (this._state === false && !this._done) {
+            this._onReject(this._onRejectArgs);
+        }
+    };
+
+    Promise.prototype.resolve = function(value) {
+        if (this._state === null) {
+            this._state = true;
+            this._onResolve(value);
+        } else {
+            // call onResolve in then
+            this._onResolveArgs = arguments;
+        }
+    };
+
+    Promise.prototype.reject = function(value) {
+        if (this._state === null) {
+            this._state = false;
+            this._onReject(value);
+        } else {
+            // call onReject in then
+            this._onRejectArgs = arguments;
+        }
+    };
+
     // returns true if secondary array is subset of primary
     var isSubset = function(primary, secondary) {
         for (var i = 0; i < secondary.length; i++) {
@@ -43,7 +85,7 @@
                     (
                         (!this._components[id].dependencies.length) ||
                         isSubset(this._createdComponentsIds, this._components[id].dependencies)
-                    ) && 
+                    ) &&
                     (this._createdComponentsIds.indexOf(id) === -1)
                 ) {
                     independentComponentsIds.push(id);
@@ -126,6 +168,10 @@
      */
     Mainpage.prototype.create = function(components) {
         this._next(this._getIndependentComponentsIds());
+    };
+
+    Mainpage.deferred = function() {
+        return new Promise();
     };
 
     if (module && module.exports) {

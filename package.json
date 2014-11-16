@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/zverev/mainpage.js",
   "devDependencies": {
+    "promises-aplus-tests": "^2.1.0",
     "should": "^4.3.0"
   }
 }
