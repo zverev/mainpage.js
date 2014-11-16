@@ -6,20 +6,20 @@
         // false = rejected
         this.promise = this;
         this._state = null;
-        this._onResolve = function() {};
-        this._onReject = function() {};
+        this._onResolve = null;
+        this._onReject = null;
         this._done = false;
     };
 
     Promise.prototype.then = function(onResolve, onReject) {
-        this._onResolve = (typeof onResolve === 'function') && onResolve;
-        this._onReject = (typeof onReject === 'function') && onReject;
+        this._onResolve = (typeof onResolve === 'function') ? onResolve : null;
+        this._onReject = (typeof onReject === 'function') ? onReject : null;
         if (this._state === true && !this._done && this._onResolve) {
-            this._onResolve(this._onResolveArgs);
+            this._onResolve.apply(null, this._onResolveArgs);
             this._done = true;
         }
         if (this._state === false && !this._done && this._onReject) {
-            this._onReject(this._onRejectArgs);
+            this._onReject.apply(null, this._onRejectArgs);
             this._done = true;
         }
         return this;
@@ -28,20 +28,26 @@
     Promise.prototype.resolve = function(value) {
         if (this._state === null) {
             this._state = true;
-            this._onResolve(value);
-        } else {
-            // call onResolve in then
-            this._onResolveArgs = arguments;
+            if (this._onResolve) {
+                this._onResolve(value);
+                this._done = true;
+            } else {
+                // call onResolve in then
+                this._onResolveArgs = arguments;
+            }
         }
     };
 
     Promise.prototype.reject = function(reason) {
         if (this._state === null) {
             this._state = false;
-            this._onReject(reason);
-        } else {
-            // call onReject in then
-            this._onRejectArgs = arguments;
+            if (this._onReject) {
+                this._onReject(reason);
+                this._done = true;
+            } else {
+                // call onReject in then
+                this._onRejectArgs = arguments;
+            }
         }
     };
 
