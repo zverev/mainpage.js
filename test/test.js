@@ -1,16 +1,16 @@
 var assert = require('assert');
 var should = require('should');
-var MainpageJS = require('../mainpage.js');
+var mp = require('../mainpage.js');
 
 var adapter = {
-    deferred: MainpageJS.deferred,
+    deferred: mp.deferred,
     resolved: function(value) {
-        var d = MainpageJS.deferred();
+        var d = mp.deferred();
         d.resolve(value);
         return d;
     },
     rejected: function(value) {
-        var d = MainpageJS.deferred();
+        var d = mp.deferred();
         d.reject(value);
         return d;
     }
@@ -23,7 +23,7 @@ describe("Promises/A+ Tests", function() {
 describe('MainpageJS', function() {
     describe('define method', function() {
         it('must add components with unique string ids', function() {
-            var mp = new MainpageJS();
+            var mp = require('../mainpage.js');
             mp.define('AuthWidget', [], function() {
                 return {};
             });
@@ -35,7 +35,7 @@ describe('MainpageJS', function() {
 
         it('must throw an exception when trying to add a component with existing id', function() {
             assert.throws(function() {
-                var mp = new MainpageJS();
+                var mp = require('../mainpage.js');
                 mp.define('AuthWidget', [], function() {
                     return {};
                 });

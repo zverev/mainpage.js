@@ -1,4 +1,11 @@
-(function() {
+(function(root, factory) {
+    if (typeof module !== 'undefined' && module.exports) {
+        // node.js
+        module.exports = factory();
+    } else {
+        root.mp = factory();
+    }
+})(this, function() {
 
     var Promise = function() {
         // null = pending
@@ -179,12 +186,11 @@
         this._next(this._getIndependentComponentsIds());
     };
 
-    Mainpage.deferred = function() {
+    var instance = new Mainpage();
+
+    instance.deferred = function() {
         return new Promise();
     };
 
-    if (module && module.exports) {
-        module.exports = Mainpage;
-    }
-
-})();
+    return instance;
+})
