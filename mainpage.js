@@ -160,7 +160,7 @@
                 dependencies: dependencies,
                 dependents: [],
                 constructor: constructor,
-                instane: null
+                instance: null
             };
         } else {
             throw 'id exists';
@@ -173,7 +173,7 @@
      * @return {Mixed} component instance
      */
     Mainpage.prototype.get = function(id) {
-        return this._components[id];
+        return this._components[id].instance;
     }
 
     /**
